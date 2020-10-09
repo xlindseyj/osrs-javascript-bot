@@ -19,6 +19,7 @@
   "dependencies": {
     "active-win": "^6.2.0",
     "lodash": "^4.17.20",
+    "prompts": "^2.3.2",
     "robotjs": "^0.6.0"
   },
   "devDependencies": {

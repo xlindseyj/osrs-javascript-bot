@@ -1,16 +1,18 @@
-const robotjs = require('robotjs');
+const robot = require('robot');
 const activeWin = require('active-win');
-const utilities = require('./helpers/utilities');
+const prompts = require('prompts');
 
-let screenSize, windowSize;
+let screenSize, windowSize, isFishing = false, inventoryFull = false;
 
 const initialize = async () => {
     console.log('Initializing');
-    screenSize = robotjs.getScreenSize();
+    screenSize = robot.getScreenSize();
     console.log('Screen size:', screenSize);
-    utilities.sleep(5);
+    console.log('Sleeping 5 seconds');
+    sleep(5);
     await activeWin().then((window) => {
         if (window.title === 'RuneLite') {
+            console.log('RuneLite found, setting bounds.');
             windowSize = window.bounds;
             console.log('Window size:', windowSize);
             start();
@@ -25,13 +27,42 @@ const main = () => {
 }
 
 const start = () => {
+    console.log('Starting')
     while (true) {
         const fishingSpot = findFishingSpot();
+
+        if (fishingSpot == false) {
+            rotateCamera();
+            continue;
+        }
+
+        robot.moveMouse(fishingSpot.x, fishingSpot.y);
+        robot.mouseClick();
+        sleep(3000);
+
+        dropFish();
     }
 }
 
 const findFishingSpot = () => {
-    
+
+}
+
+const basicRotateCamera = () => {
+    console.log('Rotating camera');
+    robot.keyToggle('right', 'down');
+    sleep(1000);
+    robot.keyToggle('right', 'up');
+}
+
+const sleep = (n) => {
+    Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, n);
+}
+
+const getRandom = (min, max) => {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
 main();
