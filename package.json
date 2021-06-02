@@ -1,15 +1,22 @@
 {
   "name": "osrs-javascript-bot",
   "version": "1.2.0",
-  "description": "RuneScape JavaScript Bot in RobotJS",
+  "description": "RuneScape JavaScript/TypeScript Bot w/ RobotJS",
   "main": "index.js",
   "scripts": {
+    "build": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "Jake Lindsey",
   "license": "MIT",
   "dependencies": {
-    "robotjs": "^0.6.0"
+    "active-win": "^7.2.0",
+    "prompts": "^2.4.1",
+    "robotjs": "^0.6.0",
+    "tslib": "^2.2.0"
+  },
+  "devDependencies": {
+    "@types/prompts": "^2.0.12"
   }
 }

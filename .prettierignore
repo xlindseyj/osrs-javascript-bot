@@ -1,0 +1,7 @@
+# Ignore artifacts:
+bin
+node_modules
+coverage
+
+# Compiled output:
+bin/**/*.js.map
