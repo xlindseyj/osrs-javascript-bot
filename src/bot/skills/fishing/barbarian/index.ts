@@ -10,7 +10,12 @@ export default class BarbarianFishing {
   private isFishing: boolean = false;
   private inventoryFull: boolean = false;
   public status: string;
-  private barbarianFishingOutlineColors: string[] = ['00b1b1', '008f8f', '00b2b2', '00b3b3', '00a3a3', '159499', '06afb0', '348e99', '348290'];
+  private endInventoryX: number = 704;
+  private endInventoryY: number = 455;
+  private endInventoryPixelColor: string = robotjs.getPixelColor(this.endInventoryX, this.endInventoryY);
+  private barbarianFishingOutlineColors: string[] = [
+    '00b1b1', '008f8f', '00b2b2', '00b3b3', '00a3a3', '159499', '06afb0', '348e99', '348290', '2d8d99', '27757d', '3a98a0'
+  ];
 
   private basicRotateCamera = async (): Promise<void> => {
     console.log('Rotating camera');
@@ -35,8 +40,8 @@ export default class BarbarianFishing {
     
     let fishingSpot: FishingSpot;
     const imageOptions: ImageOptions = {
-      height: this.screenSize.x,
-      width: this.screenSize.y,
+      height: this.windowSize.height,
+      width: this.windowSize.width,
       x: 0,
       y: 0
     };
@@ -44,9 +49,10 @@ export default class BarbarianFishing {
     const img = robotjs.screen.capture(imageOptions.x, imageOptions.y, imageOptions.width, imageOptions.height);
 
     for (let i = 0; i < 500; i++) {
-      const random_x = this.getRandomNumberBetween(0, imageOptions.width-1);
-      const random_y = this.getRandomNumberBetween(0, imageOptions.height-1);
+      const random_x =  310; // this.getRandomNumberBetween(0, imageOptions.width-1);
+      const random_y = 315; // this.getRandomNumberBetween(0, imageOptions.height-1);
       const sample_color = img.colorAt(random_x, random_y);
+      console.log(sample_color);
 
       if (this.barbarianFishingOutlineColors.includes(sample_color)) {
         // because we took a cropped screenshot, and we want to return the pixel position
@@ -107,6 +113,13 @@ export default class BarbarianFishing {
         await this.basicRotateCamera();
         // await this.fish(fishingSpot);
         this.fish(fishingSpot);
+
+        while (this.endInventoryPixelColor != robotjs.getPixelColor(this.endInventoryX, this.endInventoryY)) {
+          this.status = 'Catching fish';
+          this.sleep(this.longSleep);
+          this.endInventoryPixelColor = robotjs.getPixelColor(this.endInventoryX, this.endInventoryY);
+        }
+
         continue;
       }
 
@@ -143,6 +156,11 @@ export default class BarbarianFishing {
     max = Math.floor(max);
     return Math.floor(Math.random() * (max - min + 1)) + min;
   }
+
+  private shortsleep = this.getRandomNumberBetween(100, 700);
+  private mediumSleep = this.getRandomNumberBetween(1200, 2000);
+  private longSleep = this.getRandomNumberBetween(2100, 5000);
+  private extraSleep = this.getRandomNumberBetween(5100, 9832);
 }
 
 const barbarianFishing = new BarbarianFishing();
